@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0d1730">
+  <title>MAZZEL “Touch” 4 Versions Guide & Purchase Simulator</title>
+  <meta name="description" content="MAZZEL 5th Single “Touch” 4形態の比較・購入シミュレーター">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#top" class="mini-brand">MUZE TOOL BOX</a>
+    <div class="lang" aria-label="Language">
+      <button class="lang-btn active" data-lang="ja" type="button">日本語</button>
+      <button class="lang-btn" data-lang="en" type="button">English</button>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <img src="./assets/mazzel-touch.jpg" alt="MAZZEL artist photo" class="hero-img">
+      <div class="hero-overlay"></div>
+      <div class="hero-copy">
+        <p class="eyebrow">MAZZEL 5th Single</p>
+        <h1>Touch</h1>
+        <p class="sub" data-ja="4形態比較 ＆ 購入シミュレーター" data-en="4 Versions Guide & Purchase Simulator">4形態比較 ＆ 購入シミュレーター</p>
+      </div>
+    </section>
+
+    <section class="intro shell">
+      <div class="intro-copy">
+        <p class="intro-lead"
+           data-ja="4形態の違いを見比べながら購入枚数を選ぶと、合計金額と『自分に付いてくる特典』を自動でまとめます。"
+           data-en="Compare all four editions while choosing quantities, and the site will automatically show your total and the bonuses you’ll receive.">
+          4形態の違いを見比べながら購入枚数を選ぶと、合計金額と「自分に付いてくる特典」を自動でまとめます。
+        </p>
+      </div>
+
+      <div class="howto" aria-label="How to use">
+        <div class="howto-item">
+          <span class="howto-num">1</span>
+          <div>
+            <strong data-ja="4形態の違いを見る" data-en="Compare the 4 editions">4形態の違いを見る</strong>
+            <p data-ja="特典・DVD・購入先をカードで確認" data-en="Check bonuses, DVDs and where to buy">特典・DVD・購入先をカードで確認</p>
+          </div>
+        </div>
+        <div class="howto-arrow" aria-hidden="true">→</div>
+        <div class="howto-item">
+          <span class="howto-num">2</span>
+          <div>
+            <strong data-ja="＋で購入枚数を選ぶ" data-en="Choose quantities with +">＋で購入枚数を選ぶ</strong>
+            <p data-ja="欲しい形態を何枚でも組み合わせOK" data-en="Mix and match any editions">欲しい形態を何枚でも組み合わせOK</p>
+          </div>
+        </div>
+        <div class="howto-arrow" aria-hidden="true">→</div>
+        <div class="howto-item highlight">
+          <span class="howto-num">3</span>
+          <div>
+            <strong data-ja="自分に付く特典を確認" data-en="See your bonuses">自分に付く特典を確認</strong>
+            <p data-ja="枚数に応じて特典を自動集計" data-en="Bonuses are counted automatically">枚数に応じて特典を自動集計</p>
+          </div>
+        </div>
+      </div>
+
+      <a class="start-btn" href="#products" data-ja="形態を選んでみる ↓" data-en="Start choosing editions ↓">形態を選んでみる ↓</a>
+    </section>
+
+    <section class="shell products-section" id="products">
+      <div class="section-head">
+        <span>01</span>
+        <div>
+          <h2 data-ja="4形態を比べて、購入枚数を選ぶ" data-en="Compare editions & choose quantities">4形態を比べて、購入枚数を選ぶ</h2>
+          <p class="section-help" data-ja="各カードの ＋ / − で枚数を変更できます。DVDの内容は『見る』をタップ。" data-en="Use + / − on each card to change quantity. Tap “View” for DVD details.">各カードの ＋ / − で枚数を変更できます。DVDの内容は「見る」をタップ。</p>
+        </div>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+    </section>
+
+    <section class="shell summary-section" id="summary">
+      <div class="section-head">
+        <span>02</span>
+        <div>
+          <h2 data-ja="あなたの購入予定 ＆ 付いてくる特典" data-en="Your plan & bonuses">あなたの購入予定 ＆ 付いてくる特典</h2>
+          <p class="section-help" data-ja="上で選んだ内容がここに自動で反映されます。" data-en="Your selections above are automatically reflected here.">上で選んだ内容がここに自動で反映されます。</p>
+        </div>
+      </div>
+
+      <div class="summary-card">
+        <div class="total-row">
+          <div>
+            <span class="total-label" data-ja="購入合計" data-en="Purchase total">購入合計</span>
+            <strong id="totalItems">0 <small data-ja="枚" data-en="items">枚</small></strong>
+          </div>
+          <strong id="totalPrice">¥0</strong>
+        </div>
+
+        <div class="summary-block">
+          <h3 data-ja="選んだ商品" data-en="Selected editions">選んだ商品</h3>
+          <div id="selectedList" class="selected-list empty">
+            <p data-ja="まだ商品が選択されていません。上のカードの＋を押してみてね。" data-en="No items selected yet. Tap + on an edition card above.">まだ商品が選択されていません。上のカードの＋を押してみてね。</p>
+          </div>
+        </div>
+
+        <div class="bonus-box">
+          <div class="bonus-title-row">
+            <h3 data-ja="あなたに付いてくる特典" data-en="Bonuses you’ll receive">あなたに付いてくる特典</h3>
+            <span class="auto-badge" data-ja="自動集計" data-en="AUTO">自動集計</span>
+          </div>
+          <div id="bonusList" class="bonus-list">
+            <p class="muted" data-ja="商品を選ぶと、対象の特典がここに表示されます。" data-en="Select editions to see all applicable bonuses here.">商品を選ぶと、対象の特典がここに表示されます。</p>
+          </div>
+        </div>
+
+        <div class="conditional-box" id="earlyInfo">
+          <div class="conditional-head">
+            <span class="conditional-tag" data-ja="条件付き" data-en="IF ELIGIBLE">条件付き</span>
+            <strong data-ja="早期予約特典" data-en="Early reservation bonus">早期予約特典</strong>
+          </div>
+          <p id="earlyEstimate" data-ja="対象ページから受付期間内に購入した場合、CD1枚につき1回プレミアムイベント抽選に自動エントリーされます。" data-en="If purchased from the eligible page during the entry period, each CD gives one automatic entry to the premium-event lottery.">対象ページから受付期間内に購入した場合、CD1枚につき1回プレミアムイベント抽選に自動エントリーされます。</p>
+          <p class="conditional-note" data-ja="※封入のシリアルナンバー入り『応募抽選券』とは別企画です。応募先の振り分け機能はありません。" data-en="This is separate from the serial-numbered lottery ticket enclosed in first-press copies. This simulator does not allocate entries by event or venue.">※封入のシリアルナンバー入り「応募抽選券」とは別企画です。応募先の振り分け機能はありません。</p>
+        </div>
+
+        <button id="shareBtn" class="share-btn" type="button" disabled>
+          <span data-ja="購入予定を共有" data-en="Share this plan">購入予定を共有</span>
+        </button>
+      </div>
+    </section>
+
+    <footer class="footer shell">
+      <p data-ja="※非公式ツールです。特典は初回生産分・対象店舗・在庫状況など条件がある場合があります。購入前に必ずMAZZEL公式サイト・各販売ページで最新情報をご確認ください。"
+         data-en="Unofficial fan tool. Some bonuses depend on first-press availability, eligible stores or stock. Please check MAZZEL’s official website and each store page before purchasing.">
+         ※非公式ツールです。特典は初回生産分・対象店舗・在庫状況など条件がある場合があります。購入前に必ずMAZZEL公式サイト・各販売ページで最新情報をご確認ください。
+      </p>
+      <div class="links">
+        <a href="https://mazzel.tokyo/news/5565/" target="_blank" rel="noopener">Touch Product Info</a>
+        <a href="https://mazzel.tokyo/news/5568/" target="_blank" rel="noopener">Early Reservation Info</a>
+      </div>
+    </footer>
+  </main>
+
+  <div class="sticky-total">
+    <div>
+      <span data-ja="合計" data-en="Total">合計</span>
+      <strong id="stickyItems">0 <small data-ja="枚" data-en="items">枚</small></strong>
+    </div>
+    <strong id="stickyPrice">¥0</strong>
+    <a href="#summary" id="summaryJump" class="jump-btn" data-ja="特典を見る" data-en="See bonuses">特典を見る</a>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
