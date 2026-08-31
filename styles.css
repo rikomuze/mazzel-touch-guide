@@ -58,7 +58,7 @@ button,select,input{font:inherit} button{cursor:pointer} a{color:inherit}
 
 .share-actions{
   display:grid;
-  grid-template-columns:1.35fr 1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:10px;
   margin-top:20px;
 }
@@ -94,5 +94,92 @@ button,select,input{font:inherit} button{cursor:pointer} a{color:inherit}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 @media(max-width:700px){
   .share-actions{grid-template-columns:1fr 1fr}
-  .share-actions .primary-share{grid-column:1/-1}
+}
+
+
+/* v5: CD / DVD contents inside the purchase summary */
+.content-summary-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:18px;
+  margin-bottom:18px;
+}
+.content-summary-box{
+  min-width:0;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:18px;
+  padding:18px 18px 16px;
+  background:rgba(255,255,255,.035);
+}
+.content-summary-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding-bottom:12px;
+  margin-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.content-summary-title h3{
+  margin:0;
+  color:#fff;
+  font-size:1rem;
+  letter-spacing:-.01em;
+}
+.content-common{
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  padding:3px 8px;
+  color:#cbd4e6;
+  font-size:.65rem;
+  font-weight:800;
+  letter-spacing:.04em;
+}
+.content-summary-body{
+  color:#fff;
+  font-size:.86rem;
+}
+.content-summary-body .muted{
+  color:#9faabd;
+  margin:0;
+}
+.cd-track-list{
+  margin:0;
+  padding-left:1.35em;
+}
+.cd-track-list li+li{margin-top:5px}
+.dvd-summary-edition + .dvd-summary-edition{
+  margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+.dvd-summary-edition-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:12px;
+  margin-bottom:8px;
+}
+.dvd-summary-edition-head strong{
+  color:#fff;
+  font-size:.88rem;
+}
+.dvd-summary-edition-head span{
+  color:#b8c2d5;
+  font-size:.75rem;
+  font-weight:800;
+  white-space:nowrap;
+}
+.dvd-summary-list{
+  margin:0;
+  padding-left:1.2em;
+  color:#cbd3e2;
+  font-size:.78rem;
+  line-height:1.55;
+}
+.dvd-summary-list li+li{margin-top:5px}
+@media(max-width:760px){
+  .content-summary-grid{grid-template-columns:1fr}
 }

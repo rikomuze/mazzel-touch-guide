@@ -122,7 +122,6 @@ function renderSummary(){
   document.getElementById("totalPrice").textContent=yen(total);
   document.getElementById("stickyItems").innerHTML=`${count} <small>${lang==="ja"?"枚":"items"}</small>`;
   document.getElementById("stickyPrice").textContent=yen(total);
-  document.getElementById("shareBtn").disabled = count===0;
   document.getElementById("copyBtn").disabled = count===0;
   document.getElementById("imageShareBtn").disabled = count===0;
 
@@ -141,6 +140,38 @@ function renderSummary(){
       }
       return `<div class="selected-row"><div>${p[lang].name}${sub}</div><span>× ${state.qty[p.id]}　${yen(state.qty[p.id]*p.price)}</span></div>`;
     }).join("");
+  }
+
+  const cdSummary=document.getElementById("cdSummary");
+  const dvdSummary=document.getElementById("dvdSummary");
+
+  if(count>0){
+    cdSummary.innerHTML=`
+      <ol class="cd-track-list">
+        <li>Touch</li>
+        <li>So Strawberry</li>
+        <li>Round 12</li>
+      </ol>`;
+
+    const dvdProducts=selected.filter(p=>Array.isArray(p.dvd) && p.dvd.length);
+    if(dvdProducts.length){
+      dvdSummary.innerHTML=dvdProducts.map(p=>`
+        <div class="dvd-summary-edition">
+          <div class="dvd-summary-edition-head">
+            <strong>${p[lang].name}</strong>
+            <span>× ${state.qty[p.id]}</span>
+          </div>
+          <ul class="dvd-summary-list">
+            ${p.dvd.map(item=>`<li>${item}</li>`).join("")}
+          </ul>
+        </div>
+      `).join("");
+    }else{
+      dvdSummary.innerHTML=`<p class="muted">${lang==="ja"?"選択した商品にDVDは含まれていません。":"No DVD is included with your selected edition(s)."}</p>`;
+    }
+  }else{
+    cdSummary.innerHTML=`<p class="muted">${lang==="ja"?"商品を選ぶと表示されます。":"Select an edition to view the CD contents."}</p>`;
+    dvdSummary.innerHTML=`<p class="muted">${lang==="ja"?"DVD付きの商品を選ぶと表示されます。":"Select an edition with a DVD to view its contents."}</p>`;
   }
 
   const bonuses=[];
@@ -203,7 +234,8 @@ function buildPlanData(){
     name:p[lang].name,
     qty:state.qty[p.id],
     subtotal:state.qty[p.id]*p.price,
-    id:p.id
+    id:p.id,
+    dvd:p.dvd ? [...p.dvd] : []
   }));
 
   const bonusLines=[];
@@ -240,6 +272,19 @@ function buildShareText(){
   const lines=[lang==="ja"?"MAZZEL “Touch” 購入予定":"MAZZEL “Touch” Purchase Plan",""];
   d.selected.forEach(x=>lines.push(`${x.name} ×${x.qty}　${yen(x.subtotal)}`));
   lines.push("",`${lang==="ja"?"合計":"Total"}：${d.count}${lang==="ja"?"枚":" items"} / ${yen(d.total)}`);
+
+  lines.push("",lang==="ja"?"▼ CD収録内容":"▼ CD Contents");
+  ["Touch","So Strawberry","Round 12"].forEach((track,i)=>lines.push(`${i+1}. ${track}`));
+
+  const dvdSelected=d.selected.filter(x=>x.dvd && x.dvd.length);
+  if(dvdSelected.length){
+    lines.push("",lang==="ja"?"▼ DVD収録内容":"▼ DVD Contents");
+    dvdSelected.forEach(item=>{
+      lines.push(`[${item.name} ×${item.qty}]`);
+      item.dvd.forEach(x=>lines.push(`・${x}`));
+    });
+  }
+
   if(d.bonusLines.length){
     lines.push("",lang==="ja"?"▼ 付いてくる特典":"▼ Bonuses");
     d.bonusLines.forEach(x=>lines.push(`・${x.name} ${x.value}`));
@@ -285,71 +330,243 @@ function roundRect(ctx,x,y,w,h,r,fill){
 
 async function createPlanImageFile(){
   const d=buildPlanData();
-  const W=1080, H=1350;
+  const W=1080;
+  const PAD=58;
+  const INNER=W-PAD*2;
+
+  // A temporary canvas is used only to measure wrapped text.
+  const measureCanvas=document.createElement("canvas");
+  const mctx=measureCanvas.getContext("2d");
+
+  const fontStack='-apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif';
+
+  function setFont(ctx,weight,size){
+    ctx.font=`${weight} ${size}px ${fontStack}`;
+  }
+
+  function wrapWith(ctx,text,maxWidth){
+    const source=String(text);
+    const tokens = lang==="ja" ? [...source] : source.split(/\s+/);
+    const lines=[];
+    let line="";
+    for(const token of tokens){
+      const trial = lang==="ja"
+        ? line+token
+        : (line ? `${line} ${token}` : token);
+      if(line && ctx.measureText(trial).width > maxWidth){
+        lines.push(line);
+        line=token;
+      }else{
+        line=trial;
+      }
+    }
+    if(line) lines.push(line);
+    return lines.length ? lines : [""];
+  }
+
+  function textHeight(ctx,text,maxWidth,lineHeight){
+    return wrapWith(ctx,text,maxWidth).length * lineHeight;
+  }
+
+  // ---------- measure total height ----------
+  let H=0;
+  H += 185; // header
+  H += 36;  // gap
+  H += 176; // total card
+  H += 48;
+
+  // Selected products
+  setFont(mctx,800,25);
+  let selectedBody=0;
+  d.selected.forEach(item=>{
+    selectedBody += Math.max(
+      textHeight(mctx,item.name,590,34),
+      34
+    ) + 22;
+  });
+  H += 50 + selectedBody + 38;
+
+  // CD section
+  H += 50 + 3*36 + 38;
+
+  // DVD sections only for selected editions that include DVD
+  const dvdSelected=d.selected.filter(x=>x.dvd && x.dvd.length);
+  if(dvdSelected.length){
+    H += 50;
+    for(const item of dvdSelected){
+      setFont(mctx,850,25);
+      H += textHeight(mctx,item.name,INNER-64,34) + 14;
+      setFont(mctx,600,22);
+      for(const line of item.dvd){
+        H += textHeight(mctx,"• "+line,INNER-88,30) + 8;
+      }
+      H += 22;
+    }
+    H += 18;
+  }
+
+  // Bonuses
+  H += 58;
+  setFont(mctx,650,22);
+  for(const b of d.bonusLines){
+    const leftH=textHeight(mctx,"• "+b.name,620,30);
+    const rightH=textHeight(mctx,b.value,240,30);
+    H += Math.max(leftH,rightH)+14;
+  }
+  H += 72;
+
+  H=Math.max(1350,Math.ceil(H));
+
   const canvas=document.createElement("canvas");
-  canvas.width=W; canvas.height=H;
+  canvas.width=W;
+  canvas.height=H;
   const ctx=canvas.getContext("2d");
 
+  function drawWrapped(text,x,y,maxWidth,lineHeight,opts={}){
+    const {
+      size=24, weight=600, color="#111522", align="left"
+    }=opts;
+    setFont(ctx,weight,size);
+    ctx.fillStyle=color;
+    ctx.textAlign=align;
+    const lines=wrapWith(ctx,text,maxWidth);
+    lines.forEach((line,i)=>ctx.fillText(line,x,y+i*lineHeight));
+    ctx.textAlign="left";
+    return lines.length*lineHeight;
+  }
+
+  function sectionTitle(label,y,color="#111522"){
+    setFont(ctx,900,29);
+    ctx.fillStyle=color;
+    ctx.fillText(label,PAD,y);
+    return y+44;
+  }
+
+  function divider(y){
+    ctx.fillStyle="#e2e4e8";
+    ctx.fillRect(PAD,y,INNER,2);
+  }
+
+  // Background
   ctx.fillStyle="#f4f4f2";
   ctx.fillRect(0,0,W,H);
 
   // Header
   ctx.fillStyle="#0d1730";
-  ctx.fillRect(0,0,W,190);
+  ctx.fillRect(0,0,W,185);
   ctx.fillStyle="#ffffff";
-  ctx.font='700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText("MAZZEL 5th Single",64,68);
-  ctx.font='900 72px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText("Touch",64,145);
+  setFont(ctx,700,32);
+  ctx.fillText("MAZZEL 5th Single",PAD,64);
+  setFont(ctx,900,70);
+  ctx.fillText("Touch",PAD,142);
 
-  // Total
-  roundRect(ctx,54,230,972,175,28,"#ffffff");
-  ctx.fillStyle="#69707e";
-  ctx.font='700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText(lang==="ja"?"購入合計":"PURCHASE TOTAL",88,280);
+  let y=221;
+
+  // Total card
+  roundRect(ctx,PAD,y,INNER,176,26,"#ffffff");
+  ctx.fillStyle="#6a7080";
+  setFont(ctx,750,22);
+  ctx.fillText(lang==="ja"?"購入合計":"PURCHASE TOTAL",PAD+32,y+46);
+
   ctx.fillStyle="#111522";
-  ctx.font='900 66px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText(yen(d.total),88,352);
+  setFont(ctx,900,62);
+  ctx.fillText(yen(d.total),PAD+32,y+116);
+
   ctx.textAlign="right";
-  ctx.font='800 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText(`${d.count}${lang==="ja"?"枚":" items"}`,990,340);
+  setFont(ctx,800,29);
+  ctx.fillText(`${d.count}${lang==="ja"?"枚":" items"}`,W-PAD-30,y+110);
   ctx.textAlign="left";
+  y += 224;
 
-  // Selected
-  ctx.fillStyle="#111522";
-  ctx.font='900 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText(lang==="ja"?"選んだ商品":"SELECTED EDITIONS",64,465);
-  let y=510;
-  ctx.font='700 25px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  // Selected products
+  y=sectionTitle(lang==="ja"?"選んだ商品":"SELECTED EDITIONS",y);
+  setFont(ctx,700,25);
   for(const item of d.selected){
-    ctx.fillStyle="#111522";
-    const lines=wrapCanvasText(ctx,item.name,650);
-    lines.forEach((ln,i)=>ctx.fillText(ln,76,y+i*34));
+    const top=y;
+    const nameH=drawWrapped(item.name,PAD+18,y,590,34,{size:25,weight:750});
     ctx.textAlign="right";
-    ctx.fillText(`×${item.qty}   ${yen(item.subtotal)}`,992,y);
+    ctx.fillStyle="#111522";
+    setFont(ctx,800,24);
+    ctx.fillText(`×${item.qty}   ${yen(item.subtotal)}`,W-PAD-18,top);
     ctx.textAlign="left";
-    y += Math.max(52,lines.length*34+18);
+    y += Math.max(nameH,34)+20;
+  }
+  divider(y);
+  y += 38;
+
+  // CD contents
+  y=sectionTitle(lang==="ja"?"CD収録内容（全形態共通）":"CD CONTENTS — ALL VERSIONS",y);
+  setFont(ctx,650,24);
+  ["Touch","So Strawberry","Round 12"].forEach((track,i)=>{
+    ctx.fillStyle="#111522";
+    ctx.fillText(`${i+1}. ${track}`,PAD+20,y);
+    y += 36;
+  });
+  divider(y);
+  y += 38;
+
+  // DVD contents
+  if(dvdSelected.length){
+    y=sectionTitle(lang==="ja"?"購入したDVDの収録内容":"DVD CONTENTS INCLUDED IN YOUR SELECTION",y);
+
+    for(const item of dvdSelected){
+      roundRect(ctx,PAD,y-26,INNER,1,0,"#e2e4e8");
+      y += 8;
+
+      const nameH=drawWrapped(
+        item.name,
+        PAD+14,y,INNER-28,34,
+        {size:25,weight:850,color:"#111522"}
+      );
+      y += nameH + 7;
+
+      for(const dvd of item.dvd){
+        const h=drawWrapped(
+          "• "+dvd,
+          PAD+28,y,INNER-56,30,
+          {size:22,weight:600,color:"#343947"}
+        );
+        y += h + 8;
+      }
+      y += 18;
+    }
+
+    divider(y);
+    y += 38;
   }
 
   // Bonus panel
-  y+=14;
-  roundRect(ctx,54,y,972,1350-y-70,28,"#0d1730");
-  ctx.fillStyle="#ffffff";
-  ctx.font='900 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  ctx.fillText(lang==="ja"?"あなたに付いてくる特典":"YOUR BONUSES",88,y+58);
-  let by=y+108;
-  ctx.font='650 23px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  const bonusStart=y;
+  let bonusInnerHeight=68;
+  setFont(mctx,650,22);
   for(const b of d.bonusLines){
-    ctx.fillStyle="#ffffff";
-    const nameLines=wrapCanvasText(ctx,b.name,650);
-    nameLines.forEach((ln,i)=>ctx.fillText("• "+ln,94,by+i*31));
-    ctx.fillStyle="#cfd8eb";
+    const lh=textHeight(mctx,"• "+b.name,620,30);
+    const rh=textHeight(mctx,b.value,240,30);
+    bonusInnerHeight += Math.max(lh,rh)+14;
+  }
+  bonusInnerHeight += 30;
+
+  roundRect(ctx,PAD,bonusStart,INNER,bonusInnerHeight,26,"#0d1730");
+  ctx.fillStyle="#ffffff";
+  setFont(ctx,900,29);
+  ctx.fillText(lang==="ja"?"あなたに付いてくる特典":"YOUR BONUSES",PAD+30,bonusStart+50);
+
+  let by=bonusStart+98;
+  for(const b of d.bonusLines){
+    const leftH=drawWrapped(
+      "• "+b.name,
+      PAD+38,by,620,30,
+      {size:22,weight:650,color:"#ffffff"}
+    );
+
+    const valueLines=wrapWith(ctx,b.value,240);
     ctx.textAlign="right";
-    const valueLines=wrapCanvasText(ctx,b.value,260);
-    valueLines.forEach((ln,i)=>ctx.fillText(ln,986,by+i*31));
+    ctx.fillStyle="#cfd8eb";
+    setFont(ctx,700,22);
+    valueLines.forEach((line,i)=>ctx.fillText(line,W-PAD-32,by+i*30));
     ctx.textAlign="left";
-    by += Math.max(nameLines.length,valueLines.length)*31+15;
-    if(by>1270) break;
+
+    by += Math.max(leftH,valueLines.length*30)+14;
   }
 
   return await new Promise((resolve,reject)=>{
@@ -374,16 +591,6 @@ document.getElementById("copyBtn").addEventListener("click",async()=>{
   }
 });
 
-document.getElementById("shareBtn").addEventListener("click",async()=>{
-  const text=buildShareText();
-  try{
-    if(navigator.share) await navigator.share({title:"MAZZEL Touch Purchase Plan",text});
-    else{
-      await navigator.clipboard.writeText(text);
-      toast(lang==="ja"?"共有非対応のため文字をコピーしました":"Sharing unavailable — text copied");
-    }
-  }catch(e){}
-});
 
 document.getElementById("imageShareBtn").addEventListener("click",async()=>{
   try{
