@@ -121,9 +121,22 @@
           <p class="conditional-note" data-ja="※封入のシリアルナンバー入り『応募抽選券』とは別企画です。応募先の振り分け機能はありません。" data-en="This is separate from the serial-numbered lottery ticket enclosed in first-press copies. This simulator does not allocate entries by event or venue.">※封入のシリアルナンバー入り「応募抽選券」とは別企画です。応募先の振り分け機能はありません。</p>
         </div>
 
-        <button id="shareBtn" class="share-btn" type="button" disabled>
-          <span data-ja="画像で保存する" data-en="Share this plan">画像で保存する</span>
-        </button>
+        <div class="share-actions">
+          <button id="imageShareBtn" class="share-btn primary-share" type="button" disabled>
+            <span data-ja="画像で共有・保存" data-en="Share / Save as image">画像で共有・保存</span>
+          </button>
+          <button id="copyBtn" class="share-btn secondary-share" type="button" disabled>
+            <span data-ja="文字をコピー" data-en="Copy text">文字をコピー</span>
+          </button>
+          <button id="shareBtn" class="share-btn secondary-share" type="button" disabled>
+            <span data-ja="テキストで共有" data-en="Share as text">テキストで共有</span>
+          </button>
+        </div>
+        <p class="share-help"
+           data-ja="iPhone：『画像で共有・保存』を押すと共有シートが開きます。そこから『画像を保存』を選ぶと写真アプリに保存できます。"
+           data-en="iPhone: Tap “Share / Save as image,” then choose “Save Image” in the share sheet to save it to Photos.">
+          iPhone：「画像で共有・保存」を押すと共有シートが開きます。そこから「画像を保存」を選ぶと写真アプリに保存できます。
+        </p>
       </div>
     </section>
 
@@ -148,6 +161,7 @@
     <a href="#summary" id="summaryJump" class="jump-btn" data-ja="特典を見る" data-en="See bonuses">特典を見る</a>
   </div>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="./script.js"></script>
 </body>
 </html>

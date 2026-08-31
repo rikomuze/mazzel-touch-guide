@@ -55,3 +55,44 @@ button,select,input{font:inherit} button{cursor:pointer} a{color:inherit}
 .sticky-total{position:fixed;z-index:60;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(720px,calc(100% - 20px));border:1px solid rgba(255,255,255,.12);background:rgba(13,23,48,.96);color:#fff;backdrop-filter:blur(18px);border-radius:18px;padding:10px 12px 10px 16px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px;box-shadow:0 10px 30px rgba(0,0,0,.2)}.sticky-total>div span{display:block;font-size:.62rem;color:#aeb8cd}#stickyItems{font-size:1rem}#stickyPrice{text-align:right;font-size:1.25rem}.jump-btn{background:#fff;color:var(--navy);padding:9px 13px;border-radius:12px;text-decoration:none;font-size:.78rem;font-weight:900}
 @media(max-width:760px){.hero{margin-top:10px;border-radius:20px}.hero-copy{left:20px;bottom:18px}.product-grid{grid-template-columns:1fr}.products-section,.summary-section{padding-top:46px}.howto{grid-template-columns:1fr}.howto-arrow{transform:rotate(90deg);height:12px}}
 @media(max-width:430px){.hero-img{aspect-ratio:4/3}.hero-copy{left:16px}.product-card{padding:18px}.summary-card{padding:20px}.sticky-total{gap:9px}.info-line{grid-template-columns:64px 1fr}.bonus-item{font-size:.83rem}}
+
+.share-actions{
+  display:grid;
+  grid-template-columns:1.35fr 1fr 1fr;
+  gap:10px;
+  margin-top:20px;
+}
+.share-actions .share-btn{margin-top:0;min-height:48px}
+.primary-share{background:#fff;color:var(--navy)}
+.secondary-share{
+  background:transparent;
+  color:#fff;
+  border:1px solid rgba(255,255,255,.32);
+}
+.share-help{
+  margin:10px 2px 0;
+  color:#b9c3d8;
+  font-size:.76rem;
+  line-height:1.55;
+}
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:94px;
+  transform:translateX(-50%) translateY(12px);
+  background:#111827;
+  color:#fff;
+  padding:10px 15px;
+  border-radius:999px;
+  font-size:.82rem;
+  opacity:0;
+  pointer-events:none;
+  transition:.18s ease;
+  z-index:100;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:700px){
+  .share-actions{grid-template-columns:1fr 1fr}
+  .share-actions .primary-share{grid-column:1/-1}
+}

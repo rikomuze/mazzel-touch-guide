@@ -123,6 +123,8 @@ function renderSummary(){
   document.getElementById("stickyItems").innerHTML=`${count} <small>${lang==="ja"?"枚":"items"}</small>`;
   document.getElementById("stickyPrice").textContent=yen(total);
   document.getElementById("shareBtn").disabled = count===0;
+  document.getElementById("copyBtn").disabled = count===0;
+  document.getElementById("imageShareBtn").disabled = count===0;
 
   const selected = products.filter(p=>state.qty[p.id]>0);
   const list=document.getElementById("selectedList");
@@ -194,21 +196,218 @@ function renderAll(){ renderProducts(); renderSummary(); }
 
 document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>applyLang(b.dataset.lang)));
 
-document.getElementById("shareBtn").addEventListener("click",async()=>{
+
+function buildPlanData(){
   const {count,total}=getTotals();
-  if(!count) return;
-  const lines=products.filter(p=>state.qty[p.id]>0).map(p=>`${p[lang].name} ×${state.qty[p.id]}`);
-  if(state.qty.muzeum){
-    const k=state.keyholders.filter(Boolean);
-    if(k.length) lines.push(`${lang==="ja"?"アクキー":"Key holders"}: ${k.join(", ")}`);
+  const selected=products.filter(p=>state.qty[p.id]>0).map(p=>({
+    name:p[lang].name,
+    qty:state.qty[p.id],
+    subtotal:state.qty[p.id]*p.price,
+    id:p.id
+  }));
+
+  const bonusLines=[];
+  if(count>0){
+    bonusLines.push({
+      name:lang==="ja"?"初回プレス封入「応募抽選券」":"First-press serial lottery ticket",
+      value:(lang==="ja"?"最大 ":"Up to ")+count+(lang==="ja"?"枚":"")
+    });
+    bonusLines.push({
+      name:lang==="ja"?"ICカードステッカー":"IC card sticker",
+      value:(lang==="ja"?"最大 ":"Up to ")+count+(lang==="ja"?"枚":"")
+    });
   }
-  lines.push(`${lang==="ja"?"合計":"Total"}: ${count}${lang==="ja"?"枚":" items"} / ${yen(total)}`);
-  const text=lines.join("\n");
+  if(state.qty.limited){
+    bonusLines.push({name:lang==="ja"?"ソロフォトカード8種セットA":"Solo Photo Cards – Set A",value:"× "+state.qty.limited});
+    bonusLines.push({name:lang==="ja"?"ネームシールセット":"Name Sticker Set",value:"× "+state.qty.limited});
+  }
+  if(state.qty.regular) bonusLines.push({name:lang==="ja"?"集合フォトカードA":"Group Photo Card A",value:"× "+state.qty.regular});
+  if(state.qty.universal) bonusLines.push({name:lang==="ja"?"ソロフォトカード8種セットB":"Solo Photo Cards – Set B",value:"× "+state.qty.universal});
+  if(state.qty.muzeum){
+    bonusLines.push({name:lang==="ja"?"ソロジャケット8種 EPサイズセット":"8 Solo EP-size Jackets Set",value:"× "+state.qty.muzeum});
+    bonusLines.push({name:"40P Photobook",value:"× "+state.qty.muzeum});
+    const chosen=state.keyholders.filter(Boolean);
+    bonusLines.push({
+      name:lang==="ja"?"アクリルキーホルダー":"Acrylic Key Holder",
+      value:chosen.length ? chosen.join(" / ") : (lang==="ja"?"メンバー未選択":"Member not selected")
+    });
+  }
+  return {count,total,selected,bonusLines};
+}
+
+function buildShareText(){
+  const d=buildPlanData();
+  const lines=[lang==="ja"?"MAZZEL “Touch” 購入予定":"MAZZEL “Touch” Purchase Plan",""];
+  d.selected.forEach(x=>lines.push(`${x.name} ×${x.qty}　${yen(x.subtotal)}`));
+  lines.push("",`${lang==="ja"?"合計":"Total"}：${d.count}${lang==="ja"?"枚":" items"} / ${yen(d.total)}`);
+  if(d.bonusLines.length){
+    lines.push("",lang==="ja"?"▼ 付いてくる特典":"▼ Bonuses");
+    d.bonusLines.forEach(x=>lines.push(`・${x.name} ${x.value}`));
+  }
+  lines.push("",location.href);
+  return lines.join("\n");
+}
+
+function toast(message){
+  const el=document.getElementById("toast");
+  el.textContent=message;
+  el.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t=setTimeout(()=>el.classList.remove("show"),1800);
+}
+
+function wrapCanvasText(ctx,text,maxWidth){
+  const words = lang==="ja" ? [...text] : String(text).split(" ");
+  const lines=[];
+  let line="";
+  for(const w of words){
+    const trial=lang==="ja" ? line+w : (line ? line+" "+w : w);
+    if(ctx.measureText(trial).width>maxWidth && line){
+      lines.push(line);
+      line=w;
+    }else line=trial;
+  }
+  if(line) lines.push(line);
+  return lines;
+}
+
+function roundRect(ctx,x,y,w,h,r,fill){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r);
+  ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r);
+  ctx.closePath();
+  ctx.fillStyle=fill;
+  ctx.fill();
+}
+
+async function createPlanImageFile(){
+  const d=buildPlanData();
+  const W=1080, H=1350;
+  const canvas=document.createElement("canvas");
+  canvas.width=W; canvas.height=H;
+  const ctx=canvas.getContext("2d");
+
+  ctx.fillStyle="#f4f4f2";
+  ctx.fillRect(0,0,W,H);
+
+  // Header
+  ctx.fillStyle="#0d1730";
+  ctx.fillRect(0,0,W,190);
+  ctx.fillStyle="#ffffff";
+  ctx.font='700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText("MAZZEL 5th Single",64,68);
+  ctx.font='900 72px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText("Touch",64,145);
+
+  // Total
+  roundRect(ctx,54,230,972,175,28,"#ffffff");
+  ctx.fillStyle="#69707e";
+  ctx.font='700 24px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText(lang==="ja"?"購入合計":"PURCHASE TOTAL",88,280);
+  ctx.fillStyle="#111522";
+  ctx.font='900 66px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText(yen(d.total),88,352);
+  ctx.textAlign="right";
+  ctx.font='800 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText(`${d.count}${lang==="ja"?"枚":" items"}`,990,340);
+  ctx.textAlign="left";
+
+  // Selected
+  ctx.fillStyle="#111522";
+  ctx.font='900 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText(lang==="ja"?"選んだ商品":"SELECTED EDITIONS",64,465);
+  let y=510;
+  ctx.font='700 25px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  for(const item of d.selected){
+    ctx.fillStyle="#111522";
+    const lines=wrapCanvasText(ctx,item.name,650);
+    lines.forEach((ln,i)=>ctx.fillText(ln,76,y+i*34));
+    ctx.textAlign="right";
+    ctx.fillText(`×${item.qty}   ${yen(item.subtotal)}`,992,y);
+    ctx.textAlign="left";
+    y += Math.max(52,lines.length*34+18);
+  }
+
+  // Bonus panel
+  y+=14;
+  roundRect(ctx,54,y,972,1350-y-70,28,"#0d1730");
+  ctx.fillStyle="#ffffff";
+  ctx.font='900 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  ctx.fillText(lang==="ja"?"あなたに付いてくる特典":"YOUR BONUSES",88,y+58);
+  let by=y+108;
+  ctx.font='650 23px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+  for(const b of d.bonusLines){
+    ctx.fillStyle="#ffffff";
+    const nameLines=wrapCanvasText(ctx,b.name,650);
+    nameLines.forEach((ln,i)=>ctx.fillText("• "+ln,94,by+i*31));
+    ctx.fillStyle="#cfd8eb";
+    ctx.textAlign="right";
+    const valueLines=wrapCanvasText(ctx,b.value,260);
+    valueLines.forEach((ln,i)=>ctx.fillText(ln,986,by+i*31));
+    ctx.textAlign="left";
+    by += Math.max(nameLines.length,valueLines.length)*31+15;
+    if(by>1270) break;
+  }
+
+  return await new Promise((resolve,reject)=>{
+    canvas.toBlob(blob=>{
+      if(!blob) return reject(new Error("PNG creation failed"));
+      resolve(new File([blob],"MAZZEL_Touch_purchase_plan.png",{type:"image/png"}));
+    },"image/png");
+  });
+}
+
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+  const text=buildShareText();
+  try{
+    await navigator.clipboard.writeText(text);
+    toast(lang==="ja"?"文字をコピーしました！":"Text copied!");
+  }catch(e){
+    const ta=document.createElement("textarea");
+    ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    document.execCommand("copy"); ta.remove();
+    toast(lang==="ja"?"文字をコピーしました！":"Text copied!");
+  }
+});
+
+document.getElementById("shareBtn").addEventListener("click",async()=>{
+  const text=buildShareText();
   try{
     if(navigator.share) await navigator.share({title:"MAZZEL Touch Purchase Plan",text});
-    else if(navigator.clipboard){ await navigator.clipboard.writeText(text); alert(lang==="ja"?"購入予定をコピーしました！":"Purchase plan copied!"); }
-    else alert(text);
+    else{
+      await navigator.clipboard.writeText(text);
+      toast(lang==="ja"?"共有非対応のため文字をコピーしました":"Sharing unavailable — text copied");
+    }
   }catch(e){}
+});
+
+document.getElementById("imageShareBtn").addEventListener("click",async()=>{
+  try{
+    const file=await createPlanImageFile();
+    if(navigator.share && navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({
+        title:"MAZZEL Touch Purchase Plan",
+        files:[file]
+      });
+    }else{
+      const url=URL.createObjectURL(file);
+      const a=document.createElement("a");
+      a.href=url;
+      a.download=file.name;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),3000);
+      toast(lang==="ja"?"PNGを作成しました":"PNG created");
+    }
+  }catch(e){
+    if(e && e.name==="AbortError") return;
+    toast(lang==="ja"?"画像を作成できませんでした":"Could not create image");
+  }
 });
 
 applyLang(lang);
