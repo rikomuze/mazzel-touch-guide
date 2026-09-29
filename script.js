@@ -116,6 +116,48 @@ function getTotals(){
   return {count,total};
 }
 
+const EARLY_RESERVATION_END = "2026-09-30T23:59:59+09:00";
+
+function isEarlyReservationOpen(){
+  return Date.now() <= new Date(EARLY_RESERVATION_END).getTime();
+}
+
+function renderEarlyReservation(count){
+  const open=isEarlyReservationOpen();
+  const tag=document.getElementById("earlyTag");
+  const title=document.getElementById("earlyTitle");
+  const early=document.getElementById("earlyEstimate");
+  const note=document.getElementById("earlyNote");
+
+  if(open){
+    tag.textContent = lang==="ja" ? "9/30まで" : "UNTIL SEP 30";
+    title.textContent = lang==="ja" ? "早期予約特典" : "Early reservation bonus";
+
+    if(count>0){
+      early.textContent = lang==="ja"
+        ? `対象ページから9/30までに購入した場合、選択中の ${count}枚 ＝ 最大${count}口のプレミアムイベント抽選に自動エントリー。`
+        : `If purchased through the eligible page by Sep 30, your ${count} selected CD${count===1?"":"s"} = up to ${count} automatic premium-event lottery entr${count===1?"y":"ies"}.`;
+    }else{
+      early.textContent = lang==="ja"
+        ? "対象ページから9/30までに購入した場合、CD1枚につき1回プレミアムイベント抽選に自動エントリーされます。"
+        : "If purchased from the eligible page by Sep 30, each CD gives one automatic entry to the premium-event lottery.";
+    }
+
+    note.textContent = lang==="ja"
+      ? "※封入のシリアルナンバー入り「応募抽選券」とは別企画です。応募先の振り分け機能はありません。"
+      : "This is separate from the serial-numbered lottery ticket enclosed in first-press copies. This simulator does not allocate entries by event or venue.";
+  }else{
+    tag.textContent = lang==="ja" ? "受付終了" : "ENDED";
+    title.textContent = lang==="ja" ? "早期予約特典（受付終了）" : "Early reservation bonus (ended)";
+    early.textContent = lang==="ja"
+      ? "早期予約特典の受付は9/30で終了しました。現在の購入分はプレミアムイベント抽選の自動エントリー対象外です。"
+      : "The early reservation bonus ended on Sep 30. Purchases made now are not eligible for automatic entry to the premium-event lottery.";
+    note.textContent = lang==="ja"
+      ? "※CD封入のシリアルナンバー入り「応募抽選券」は別企画です。"
+      : "The serial-numbered lottery ticket enclosed with first-press CDs is a separate promotion.";
+  }
+}
+
 function renderSummary(){
   const {count,total}=getTotals();
   document.getElementById("totalItems").innerHTML=`${count} <small>${lang==="ja"?"枚":"items"}</small>`;
@@ -202,16 +244,7 @@ function renderSummary(){
     ? bonuses.map(([a,b])=>`<div class="bonus-item"><span>${a}</span><strong>${b}</strong></div>`).join("")
     : `<p class="muted">${lang==="ja"?"商品を選ぶと、対象の特典がここに表示されます。":"Select editions to see all applicable bonuses here."}</p>`;
 
-  const early=document.getElementById("earlyEstimate");
-  if(count>0){
-    early.textContent = lang==="ja"
-      ? `対象ページから受付期間内に購入した場合、選択中の ${count}枚 ＝ 最大${count}口のプレミアムイベント抽選に自動エントリー。`
-      : `If purchased through the eligible page during the entry period, your ${count} selected CD${count===1?"":"s"} = up to ${count} automatic premium-event lottery entr${count===1?"y":"ies"}.`;
-  }else{
-    early.textContent = lang==="ja"
-      ? "対象ページから受付期間内に購入した場合、CD1枚につき1回プレミアムイベント抽選に自動エントリーされます。"
-      : "If purchased from the eligible page during the entry period, each CD gives one automatic entry to the premium-event lottery.";
-  }
+  renderEarlyReservation(count);
 }
 
 function applyLang(next){
