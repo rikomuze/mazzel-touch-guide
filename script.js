@@ -3,8 +3,8 @@ const MEMBERS = ["KAIRYU","NAOYA","RAN","SEITO","RYUKI","TAKUTO","HAYATO","EIKI"
 const products = [
   {
     id:"limited", color:"red", price:3850,
-    ja:{name:"初回限定盤", kicker:"LIMITED EDITION", purchase:"全国の取扱店舗・ECサイト", bonus:"ソロフォトカード8種セットA", goods:"ネームシールセット（MAZZEL ver.＋メンバー名 ver.）"},
-    en:{name:"LIMITED EDITION", kicker:"初回限定盤", purchase:"Participating stores and online shops", bonus:"Solo Photo Cards – 8-card Set A", goods:"Name Sticker Set (MAZZEL ver. + Member Name ver.)"},
+    ja:{name:"初回限定盤", kicker:"LIMITED EDITION", purchase:"全国の取扱店舗・ECサイト", bonus:"ソロフォトカード8種セットA（Touchビジュ）", goods:"ネームシールセット（MAZZEL ver.＋メンバー名 ver.）"},
+    en:{name:"LIMITED EDITION", kicker:"初回限定盤", purchase:"Participating stores and online shops", bonus:"Solo Photo Cards – 8-card Set A (Touch visual)", goods:"Name Sticker Set (MAZZEL ver. + Member Name ver.)"},
     badges:["CD","DVD","GOODS"],
     dvd:[
       "Get Up And Dance -Music Video-",
@@ -24,8 +24,8 @@ const products = [
   },
   {
     id:"universal", color:"blue", price:5390,
-    ja:{name:"UNIVERSAL MUSIC STORE盤", kicker:"STORE EXCLUSIVE", purchase:"UNIVERSAL MUSIC STORE限定販売", bonus:"ソロフォトカード8種セットB", goods:"なし"},
-    en:{name:"UNIVERSAL MUSIC STORE EDITION", kicker:"STORE EXCLUSIVE", purchase:"Exclusive to UNIVERSAL MUSIC STORE", bonus:"Solo Photo Cards – 8-card Set B", goods:"None"},
+    ja:{name:"UNIVERSAL MUSIC STORE盤", kicker:"STORE EXCLUSIVE", purchase:"UNIVERSAL MUSIC STORE限定販売", bonus:"ソロフォトカード8種セットB（So Strawberryビジュ）", goods:"なし"},
+    en:{name:"UNIVERSAL MUSIC STORE EDITION", kicker:"STORE EXCLUSIVE", purchase:"Exclusive to UNIVERSAL MUSIC STORE", bonus:"Solo Photo Cards – 8-card Set B (So Strawberry visual)", goods:"None"},
     badges:["CD","DVD"],
     dvd:["平安神宮御鎮座百三十年記念 MAZZEL 奉納 Special Live (2026.03.21 @平安神宮)"]
   },
@@ -180,11 +180,11 @@ function renderSummary(){
     bonuses.push([lang==="ja"?"ICカードステッカー":"IC card sticker", `${lang==="ja"?"最大 ":"Up to "}${count}${lang==="ja"?"枚 ※対象店舗・在庫状況による":" ※subject to store eligibility / availability"}`]);
   }
   if(state.qty.limited){
-    bonuses.push([lang==="ja"?"ソロフォトカード8種セットA":"Solo Photo Cards – Set A",`× ${state.qty.limited}`]);
+    bonuses.push([lang==="ja"?"ソロフォトカード8種セットA（Touchビジュ）":"Solo Photo Cards – Set A (Touch visual)",`× ${state.qty.limited}`]);
     bonuses.push([lang==="ja"?"ネームシールセット（MAZZEL ver.＋メンバー名 ver.）":"Name Sticker Set (MAZZEL ver. + Member Name ver.)",`× ${state.qty.limited}`]);
   }
   if(state.qty.regular) bonuses.push([lang==="ja"?"集合フォトカードA":"Group Photo Card A",`× ${state.qty.regular}`]);
-  if(state.qty.universal) bonuses.push([lang==="ja"?"ソロフォトカード8種セットB":"Solo Photo Cards – Set B",`× ${state.qty.universal}`]);
+  if(state.qty.universal) bonuses.push([lang==="ja"?"ソロフォトカード8種セットB（So Strawberryビジュ）":"Solo Photo Cards – Set B (So Strawberry visual)",`× ${state.qty.universal}`]);
   if(state.qty.muzeum){
     bonuses.push([lang==="ja"?"ソロジャケット8種 EPサイズセット":"8 Solo EP-size Jackets Set",`× ${state.qty.muzeum}`]);
     bonuses.push(["40P Photobook",`× ${state.qty.muzeum}`]);
@@ -250,11 +250,11 @@ function buildPlanData(){
     });
   }
   if(state.qty.limited){
-    bonusLines.push({name:lang==="ja"?"ソロフォトカード8種セットA":"Solo Photo Cards – Set A",value:"× "+state.qty.limited});
+    bonusLines.push({name:lang==="ja"?"ソロフォトカード8種セットA（Touchビジュ）":"Solo Photo Cards – Set A (Touch visual)",value:"× "+state.qty.limited});
     bonusLines.push({name:lang==="ja"?"ネームシールセット":"Name Sticker Set",value:"× "+state.qty.limited});
   }
   if(state.qty.regular) bonusLines.push({name:lang==="ja"?"集合フォトカードA":"Group Photo Card A",value:"× "+state.qty.regular});
-  if(state.qty.universal) bonusLines.push({name:lang==="ja"?"ソロフォトカード8種セットB":"Solo Photo Cards – Set B",value:"× "+state.qty.universal});
+  if(state.qty.universal) bonusLines.push({name:lang==="ja"?"ソロフォトカード8種セットB（So Strawberryビジュ）":"Solo Photo Cards – Set B (So Strawberry visual)",value:"× "+state.qty.universal});
   if(state.qty.muzeum){
     bonusLines.push({name:lang==="ja"?"ソロジャケット8種 EPサイズセット":"8 Solo EP-size Jackets Set",value:"× "+state.qty.muzeum});
     bonusLines.push({name:"40P Photobook",value:"× "+state.qty.muzeum});
