@@ -216,19 +216,6 @@ footer a{text-underline-offset:3px}
   <section class="block shell" id="choose">
     <div class="head"><span class="no">01</span><h2 data-ja="4形態は「仕様 × ディスク」の組み合わせ" data-en="4 editions = version × disc format">4形態は「仕様 × ディスク」の組み合わせ</h2></div>
 
-    <div class="axes">
-      <div>
-        <span class="k" data-ja="違い ①　横の行" data-en="DIFFERENCE 1 — ROWS">違い ①　横の行</span>
-        <strong><span class="tag lim" data-ja="初回限定盤" data-en="Limited">初回限定盤</span> / <span class="tag reg" data-ja="通常盤" data-en="Regular">通常盤</span></strong>
-        <p data-ja="価格・パッケージ・封入物・特典映像が違います。" data-en="Price, packaging, extras and bonus footage differ.">価格・パッケージ・封入物・特典映像が違います。</p>
-      </div>
-      <div>
-        <span class="k" data-ja="違い ②　縦の列" data-en="DIFFERENCE 2 — COLUMNS">違い ②　縦の列</span>
-        <strong>Blu-ray / DVD</strong>
-        <p data-ja="ディスク枚数と画質、再生できる機器が違います。中身と価格は同じ。" data-en="Number of discs, picture quality and players differ. Content and price are the same.">ディスク枚数と画質、再生できる機器が違います。中身と価格は同じ。</p>
-      </div>
-    </div>
-
     <p class="note" data-ja="ライブ本編（全27曲）はどの形態も共通です。欲しいマスの ＋ で枚数を選んでください。" data-en="All editions contain the same 27-song concert. Tap + on the editions you want.">ライブ本編（全27曲）はどの形態も共通です。欲しいマスの ＋ で枚数を選んでください。</p>
 
     <table class="matrix" aria-label="形態の選択">
@@ -426,13 +413,13 @@ function render(){
     const add=(label,val)=>{li(get,label,val);plainLines.push(val?label+" × "+val.replace(/[^0-9]/g,""):label)};
     li(get,t("ライブ本編（全27曲）","Live concert (27 songs)"),null);plainLines.push(t("ライブ本編（全27曲）","Live concert (27 songs)"));
     if(lim){
-      li(get,t("初回限定盤の特典映像","Limited bonus footage"),null,null,"lim");plainLines.push(t("初回限定盤の特典映像：","Limited bonus: ")+BONUS.lim.join(" / "));
+      li(get,t("初回限定盤の特典映像","Limited bonus footage"),null,null,"lim");plainLines.push(t("初回限定盤の特典映像","Limited bonus footage"),...BONUS.lim.map(b=>"・"+b));
       BONUS.lim.forEach(b=>li(get,b,null,"sub"));
       add(t("40P Photobook","40-page photobook"),"× "+lim);
       add(t("銀テープレプリカ","Replica silver tape"),"× "+lim);
     }
     if(reg){
-      li(get,t("通常盤の特典映像","Regular bonus footage"),null,null,"reg");plainLines.push(t("通常盤の特典映像：","Regular bonus: ")+BONUS.reg.join(" / "));
+      li(get,t("通常盤の特典映像","Regular bonus footage"),null,null,"reg");plainLines.push(t("通常盤の特典映像","Regular bonus footage"),...BONUS.reg.map(b=>"・"+b));
       BONUS.reg.forEach(b=>li(get,b,null,"sub"));
       add(t("8Pリーフレット","8-page leaflet"),"× "+reg);
     }
@@ -460,10 +447,26 @@ function planText(){return ["BANQUET "+t("購入予定","order plan"),t("合計 
 $("copy").addEventListener("click",async()=>{try{await navigator.clipboard.writeText(planText());toast(t("コピーしました","Copied"))}catch(e){toast(t("コピーできませんでした","Copy failed"))}});
 
 $("share").addEventListener("click",()=>{
-  const W=1080,pad=64,lh=52,body=plainLines.length;
-  const c=document.createElement("canvas");c.width=W;c.height=330+body*lh+90;
-  const x=c.getContext("2d");
+  const W=1080,pad=64,lh=50,maxW=W-pad*2-24;
   const F='"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif';
+  const m=document.createElement("canvas").getContext("2d");
+  const isLim=s=>s.startsWith("初回限定盤")||s.startsWith("Limited");
+  const isReg=s=>s.startsWith("通常盤")||s.startsWith("Regular");
+  const fontOf=r=>(r.bar?"bold ":"")+(r.sub?"24px ":"28px ")+F;
+  /* 1行に収まらない文字は折り返す（横に潰さない） */
+  const wrap=(text,font,width)=>{m.font=font;const out=[];let line="";
+    for(const ch of text){if(m.measureText(line+ch).width>width&&line){out.push(line);line=ch.trim()?ch:""}else line+=ch}
+    if(line)out.push(line);return out};
+  const rows=[];
+  plainLines.forEach(s=>{
+    if(s==="—"){rows.push({rule:true});return}
+    const r={bar:isLim(s)?"#d8344c":isReg(s)?"#1766b4":null,sub:s.startsWith("・")};
+    const indent=r.bar||r.sub?24:0;
+    wrap(s,fontOf(r),maxW-indent).forEach((l,k)=>rows.push({...r,text:l,first:k===0,indent}));
+  });
+  const bodyH=rows.reduce((h,r,i)=>h+(r.rule?lh*0.6:r.sub?lh*0.8:lh)+(r.sub&&rows[i+1]&&!rows[i+1].sub?10:0),0);
+  const c=document.createElement("canvas");c.width=W;c.height=Math.ceil(250+60+bodyH+90);
+  const x=c.getContext("2d");
   x.fillStyle="#f5f5f3";x.fillRect(0,0,W,c.height);
   x.fillStyle="#0d1730";x.fillRect(0,0,W,250);
   x.fillStyle="#aeb8cd";x.font="bold 24px "+F;x.fillText("MAZZEL 1st Arena Tour 2026 “Banquet”",pad,70);
@@ -471,11 +474,12 @@ $("share").addEventListener("click",()=>{
   x.font="900 64px "+F;x.fillText($("sumPrice").textContent,pad,212);
   x.font="bold 30px "+F;x.textAlign="right";x.fillText($("sumCount").textContent,W-pad,212);x.textAlign="left";
   let y=320;
-  plainLines.forEach(s=>{
-    if(s==="—"){x.strokeStyle="#c9cbd0";x.lineWidth=2;x.beginPath();x.moveTo(pad,y-30);x.lineTo(W-pad,y-30);x.stroke();y+=lh*0.6;return}
-    const isLim=s.startsWith(P[0].ja.slice(0,5))||s.startsWith("Limited"),isReg=s.startsWith(P[2].ja.slice(0,3))||s.startsWith("Regular");
-    if(isLim||isReg){x.fillStyle=isLim?"#d8344c":"#1766b4";x.fillRect(pad,y-24,10,26)}
-    x.fillStyle="#11151d";x.font=(isLim||isReg?"bold ":"")+"28px "+F;x.fillText(s,pad+(isLim||isReg?24:0),y,W-pad*2-24);y+=lh;
+  rows.forEach((r,i)=>{
+    if(i&&rows[i-1].sub&&!r.sub)y+=10;
+    if(r.rule){x.strokeStyle="#c9cbd0";x.lineWidth=2;x.beginPath();x.moveTo(pad,y-30);x.lineTo(W-pad,y-30);x.stroke();y+=lh*0.6;return}
+    if(r.bar&&r.first){x.fillStyle=r.bar;x.fillRect(pad,y-24,10,26)}
+    x.fillStyle=r.sub?"#4f5561":"#11151d";x.font=fontOf(r);x.fillText(r.text,pad+r.indent,y);
+    y+=r.sub?lh*0.8:lh;
   });
   x.fillStyle="#8a8f98";x.font="22px "+F;x.fillText("MUZE TOOL BOX — "+t("非公式ファンツール","unofficial fan tool"),pad,c.height-40);
   c.toBlob(async blob=>{
