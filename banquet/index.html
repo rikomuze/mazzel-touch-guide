@@ -21,8 +21,7 @@
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;
-  line-height:1.6;padding-bottom:0}
-.summary{padding-bottom:120px!important}
+  line-height:1.6;padding-bottom:110px}
 button{font:inherit;cursor:pointer;color:inherit}
 a{color:inherit}
 .shell{width:min(960px,calc(100% - 32px));margin-inline:auto}
@@ -125,31 +124,46 @@ section.block{padding-top:52px}
 .perk strong{font-size:1.05rem}
 .perk span{color:var(--sub);font-size:.86rem}
 
-/* ---------- 購入予定 ---------- */
-.summary{margin-top:52px;background:var(--navy);color:#fff;padding:40px 0 44px}
-.summary .head{border-color:#fff}
-.summary .head .no{color:#8d98b1}
-.total{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.2)}
-.total .lbl{font-size:.72rem;color:#aeb8cd;font-weight:800;display:block}
-#sumCount{font-size:1.3rem;font-weight:900}
-#sumPrice{font-size:clamp(2rem,6vw,2.6rem);font-weight:900;letter-spacing:-.03em;line-height:1}
-.sum-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px}
-.sum-cols h3{font-size:.8rem;letter-spacing:.06em;color:#aeb8cd;margin:0 0 8px;font-weight:800}
-.lines{list-style:none;margin:0;padding:0}
-.lines li{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.9rem}
-.lines li span+span{font-weight:800;white-space:nowrap;text-align:right}
-.lines li.head-line{font-weight:800}
-.lines li.sub{font-size:.8rem;color:#c3cbdb;padding:3px 0 3px 14px;border-bottom:0}
-.lines .empty{color:#9faabd;border:0}
-.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:6px;vertical-align:1px}
+/* ---------- 購入予定（Touchと同じ構成） ---------- */
+.summary-card{background:var(--navy);color:#fff;border-radius:24px;padding:26px}
+.total-row{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.17)}
+.total-label{display:block;font-size:.72rem;color:#b7c1d7;font-weight:800}
+#sumCount{font-size:1.5rem}
+#sumPrice{font-size:clamp(1.9rem,6vw,2.4rem);letter-spacing:-.03em;line-height:1}
+.summary-block{padding-top:18px}
+.summary-block h3,.bonus-box h3{margin:0;font-size:1rem}
+.selected-list{padding:8px 0 16px;border-bottom:1px solid rgba(255,255,255,.17)}
+.selected-row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:7px 0;align-items:baseline}
+.selected-row .r{font-weight:850;white-space:nowrap}
+.selected-row .r span{margin-right:14px}
+.empty-msg{color:#9faabd;margin:6px 0 0;font-size:.9rem}
+.dot{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:8px;vertical-align:1px}
 .dot.lim{background:#ff6b80}.dot.reg{background:#5aa2ef}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
-.actions button{min-height:46px;padding:0 18px;border-radius:10px;font-weight:800;border:1px solid rgba(255,255,255,.35);background:transparent;color:#fff}
+.content-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.cbox{min-width:0;border:1px solid rgba(255,255,255,.14);border-radius:18px;padding:18px 18px 16px;background:rgba(255,255,255,.035)}
+.cbox-title{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid rgba(255,255,255,.12)}
+.cbox-title h3{margin:0;font-size:1rem}
+.pill{flex:0 0 auto;border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:3px 8px;color:#cbd4e6;font-size:.65rem;font-weight:800;letter-spacing:.04em}
+.cbox-body{font-size:.86rem}
+.ed+.ed{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.12)}
+.ed-head{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px}
+.ed-head strong{font-size:.9rem}
+.ed-head span{color:#b8c2d5;font-size:.75rem;font-weight:800;white-space:nowrap}
+.ed ul{margin:0;padding-left:1.2em;color:#cbd3e2;font-size:.8rem;line-height:1.6}
+.ed li+li{margin-top:3px}
+.ed li b{color:#fff;font-weight:800}
+.bonus-box{padding:6px 0 4px}
+.bonus-title-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.auto-badge{font-size:.65rem;font-weight:900;letter-spacing:.05em;padding:4px 8px;border-radius:999px;background:#fff;color:var(--navy)}
+.bonus-item{display:flex;justify-content:space-between;gap:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:.92rem}
+.bonus-item strong{text-align:right}
+.bonus-item small{font-weight:700;color:#b7c1d7;margin-left:4px}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.actions button{min-height:48px;border-radius:14px;font-weight:900;border:1px solid rgba(255,255,255,.32);background:transparent;color:#fff}
 .actions button.main{background:#fff;color:var(--navy);border-color:#fff}
 .actions button:disabled{opacity:.4;cursor:not-allowed}
-.actions .reset{margin-left:auto}
-
-.sum-foot{margin-top:34px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15);color:#9faabd;font-size:.78rem}
+.reset{display:block;margin:14px auto 0;background:none;border:0;color:#b7c1d7;font-size:.8rem;text-decoration:underline;text-underline-offset:3px}
+.sum-foot{margin-top:22px;color:var(--muted);font-size:.78rem}
 .sum-foot a{text-underline-offset:3px}
 
 /* ---------- 下部固定バー ---------- */
@@ -171,7 +185,9 @@ section.block{padding-top:52px}
   .axes>div+div{padding-left:0;border-left:0;border-top:1px solid var(--line)}
   .setlist-wrap{grid-template-columns:1fr}
   .setlist{columns:1}
-  .sum-cols{grid-template-columns:1fr;gap:22px}
+  .content-grid{grid-template-columns:1fr}
+  .bonus-item small{display:block;margin:2px 0 0}
+  .summary-card{padding:20px;border-radius:20px}
 }
 @media (max-width:430px){
   .shell{width:calc(100% - 24px)}
@@ -188,7 +204,7 @@ section.block{padding-top:52px}
 </style>
 <script>
 /* キャッシュ対策：最新の version.json と違えば、新しい版を読み込み直す */
-(function(){var BUILD="20261126-1310";
+(function(){var BUILD="20261126-1320";
   fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     if(!j||!j.v||j.v===BUILD)return;
     var key="reloaded-"+j.v;try{if(sessionStorage.getItem(key))return;sessionStorage.setItem(key,"1")}catch(e){}
@@ -325,32 +341,45 @@ section.block{padding-top:52px}
   </section>
 
   <!-- 06 購入予定 -->
-  <section class="summary" id="summary">
-    <div class="shell">
-      <div class="head"><span class="no">06</span><h2 data-ja="あなたの購入予定" data-en="Your order plan">あなたの購入予定</h2></div>
-      <div class="total">
-        <div><span class="lbl" data-ja="合計枚数" data-en="ITEMS">合計枚数</span><span id="sumCount">0</span></div>
-        <div style="text-align:right"><span class="lbl" data-ja="合計金額（税込・送料別）" data-en="TOTAL (tax incl., excl. shipping)">合計金額（税込・送料別）</span><span id="sumPrice">¥0</span></div>
+  <section class="block shell" id="summary">
+    <div class="head"><span class="no">06</span><h2 data-ja="あなたの購入予定 ＆ 付いてくるもの" data-en="Your plan & what you get">あなたの購入予定 ＆ 付いてくるもの</h2></div>
+    <p class="note" data-ja="上で選んだ内容がここに自動で反映されます。" data-en="Your selections above are reflected here automatically.">上で選んだ内容がここに自動で反映されます。</p>
+    <div class="summary-card">
+      <div class="total-row">
+        <div><span class="total-label" data-ja="購入合計" data-en="Purchase total">購入合計</span><strong id="sumCount">0 枚</strong></div>
+        <strong id="sumPrice">¥0</strong>
       </div>
-      <div class="sum-cols">
-        <div>
-          <h3 data-ja="選んだ形態" data-en="SELECTED">選んだ形態</h3>
-          <ul class="lines" id="selList"></ul>
-        </div>
-        <div>
-          <h3 data-ja="手に入るもの" data-en="WHAT YOU GET">手に入るもの</h3>
-          <ul class="lines" id="getList"></ul>
-        </div>
+
+      <div class="summary-block">
+        <h3 data-ja="選んだ商品" data-en="Selected editions">選んだ商品</h3>
+        <div id="selList" class="selected-list"></div>
       </div>
+
+      <div class="content-grid">
+        <section class="cbox">
+          <div class="cbox-title"><h3 data-ja="ディスク構成" data-en="Disc layout">ディスク構成</h3><span class="pill" data-ja="選択した形態のみ" data-en="SELECTED ONLY">選択した形態のみ</span></div>
+          <div id="discBox" class="cbox-body"></div>
+        </section>
+        <section class="cbox">
+          <div class="cbox-title"><h3 data-ja="特典映像" data-en="Bonus footage">特典映像</h3><span class="pill" data-ja="選択した仕様のみ" data-en="SELECTED ONLY">選択した仕様のみ</span></div>
+          <div id="bonusBox" class="cbox-body"></div>
+        </section>
+      </div>
+
+      <div class="bonus-box">
+        <div class="bonus-title-row"><h3 data-ja="あなたに付いてくるもの" data-en="What you'll receive">あなたに付いてくるもの</h3><span class="auto-badge" data-ja="自動集計" data-en="AUTO">自動集計</span></div>
+        <div id="getList"></div>
+      </div>
+
       <div class="actions">
         <button type="button" class="main" id="share" disabled data-ja="画像で共有・保存" data-en="Share / save image">画像で共有・保存</button>
         <button type="button" id="copy" disabled data-ja="文字をコピー" data-en="Copy text">文字をコピー</button>
-        <button type="button" class="reset" id="reset" data-ja="リセット" data-en="Reset">リセット</button>
       </div>
-      <div class="sum-foot">
+      <button type="button" class="reset" id="reset" data-ja="選択をリセット" data-en="Reset selection">選択をリセット</button>
+    </div>
+    <div class="sum-foot">
     <p data-ja="※非公式ファンツールです。送料・割引は含みません。購入特典は対象店舗・在庫により付かない場合があります。収録内容・仕様は変更になる場合があるため、購入前に公式情報をご確認ください。" data-en="Unofficial fan tool. Shipping and discounts are not included. Store bonuses depend on store and stock. Contents may change — check official info before buying.">※非公式ファンツールです。送料・割引は含みません。購入特典は対象店舗・在庫により付かない場合があります。収録内容・仕様は変更になる場合があるため、購入前に公式情報をご確認ください。</p>
     <p><a href="https://mazzel.lnk.to/Banquet_Tour" target="_blank" rel="noopener" data-ja="公式予約ページ" data-en="Official preorder page">公式予約ページ</a>　·　<a href="../" data-ja="“Touch” 4形態ガイド" data-en="“Touch” edition guide">“Touch” 4形態ガイド</a></p>
-      </div>
     </div>
   </section>
 
@@ -396,15 +425,12 @@ function buildSetlist(){
 }
 
 let plainLines=[];
-function li(list,label,value,cls,dot){
-  const el=document.createElement("li");if(cls)el.className=cls;
-  const a=document.createElement("span");
-  if(dot){const d=document.createElement("i");d.className="dot "+dot;a.append(d)}
-  a.append(document.createTextNode(label));el.append(a);
-  if(value!=null){const b=document.createElement("span");b.textContent=value;el.append(b)}
-  list.append(el);
+const mk=(tag,cls,text)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e};
+function discs(i){
+  const bd=i%2===0;
+  return bd?[["DISC 1",t("ライブ本編 全27曲","Concert, all 27 songs")],["DISC 2",t("特典映像","Bonus footage")]]
+           :[["DISC 1",t("ライブ本編 1〜19曲目","Concert, songs 1–19")],["DISC 2",t("ライブ本編 20〜27曲目","Concert, songs 20–27")],["DISC 3",t("特典映像","Bonus footage")]];
 }
-
 function render(){
   const n=q.reduce((a,b)=>a+b,0);
   const total=q.reduce((a,v,i)=>a+v*P[i].price,0);
@@ -417,29 +443,42 @@ function render(){
   $("sumCount").textContent=unit(n);$("stCount").textContent=unit(n);
   $("sumPrice").textContent=yen(total);$("stPrice").textContent=yen(total);
 
-  const sel=$("selList"),get=$("getList");sel.replaceChildren();get.replaceChildren();
+  const sel=$("selList"),disc=$("discBox"),bon=$("bonusBox"),get=$("getList");
+  [sel,disc,bon,get].forEach(e=>e.replaceChildren());
   plainLines=[];
   if(!n){
-    li(sel,t("まだ選ばれていません。上の表の ＋ を押してください。","Nothing selected yet. Tap + in the table above."),null,"empty");
-    li(get,t("形態を選ぶと、付いてくるものがここにまとまります。","Your items will be listed here."),null,"empty");
+    sel.append(mk("p","empty-msg",t("まだ商品が選択されていません。上の表の ＋ を押してみてね。","Nothing selected yet. Tap + in the table above.")));
+    disc.append(mk("p","empty-msg",t("形態を選ぶと表示されます。","Select an edition to see its discs.")));
+    bon.append(mk("p","empty-msg",t("形態を選ぶと表示されます。","Select an edition to see its bonus footage.")));
+    get.append(mk("p","empty-msg",t("形態を選ぶと、付いてくるものがここに表示されます。","Select editions to see what you'll receive.")));
   }else{
-    q.forEach((v,i)=>{if(v){const name=P[i][lang];li(sel,name+" × "+v,yen(v*P[i].price),null,P[i].ed);plainLines.push(name+" × "+v+"（"+yen(v*P[i].price)+"）")}});
+    /* 選んだ商品 */
+    q.forEach((v,i)=>{if(!v)return;
+      const row=mk("div","selected-row"),l=mk("span");const d=mk("i","dot "+P[i].ed);l.append(d,document.createTextNode(P[i][lang]));
+      const r=mk("span","r");r.append(mk("span",null,"× "+v),document.createTextNode(yen(v*P[i].price)));
+      row.append(l,r);sel.append(row);
+      plainLines.push(P[i][lang]+" × "+v+"（"+yen(v*P[i].price)+"）");
+    });
+    /* ディスク構成 */
+    q.forEach((v,i)=>{if(!v)return;
+      const box=mk("div","ed"),h=mk("div","ed-head");h.append(mk("strong",null,P[i][lang]),mk("span",null,"× "+v));
+      const ul=mk("ul");discs(i).forEach(([d,c])=>{const li=mk("li");li.append(mk("b",null,d),document.createTextNode("："+c));ul.append(li)});
+      box.append(h,ul);disc.append(box);
+    });
+    /* 特典映像 */
     plainLines.push("—");
-    const add=(label,val)=>{li(get,label,val);plainLines.push(val?label+" × "+val.replace(/[^0-9]/g,""):label)};
-    li(get,t("ライブ本編（全27曲）","Live concert (27 songs)"),null);plainLines.push(t("ライブ本編（全27曲）","Live concert (27 songs)"));
-    if(lim){
-      li(get,t("初回限定盤の特典映像","Limited bonus footage"),null,null,"lim");plainLines.push(t("初回限定盤の特典映像","Limited bonus footage"),...BONUS.lim.map(b=>"・"+b));
-      BONUS.lim.forEach(b=>li(get,b,null,"sub"));
-      add(t("40P Photobook","40-page photobook"),"× "+lim);
-      add(t("銀テープレプリカ","Replica silver tape"),"× "+lim);
-    }
-    if(reg){
-      li(get,t("通常盤の特典映像","Regular bonus footage"),null,null,"reg");plainLines.push(t("通常盤の特典映像","Regular bonus footage"),...BONUS.reg.map(b=>"・"+b));
-      BONUS.reg.forEach(b=>li(get,b,null,"sub"));
-      add(t("8Pリーフレット","8-page leaflet"),"× "+reg);
-    }
-    li(get,t("A5クリアファイル","A5 clear file"),t("対象店舗・在庫あり時","if eligible"));
-    plainLines.push(t("A5クリアファイル（対象店舗・在庫がある場合）","A5 clear file (if eligible)"));
+    [["lim",lim,t("初回限定盤","Limited Edition")],["reg",reg,t("通常盤","Regular Edition")]].forEach(([k,c,name])=>{if(!c)return;
+      const box=mk("div","ed"),h=mk("div","ed-head");const st=mk("strong");st.append(mk("i","dot "+k),document.createTextNode(name));h.append(st,mk("span",null,"× "+c));
+      const ul=mk("ul");BONUS[k].forEach(b=>ul.append(mk("li",null,b)));box.append(h,ul);bon.append(box);
+      plainLines.push(name+t("の特典映像"," bonus footage"),...BONUS[k].map(b=>"・"+b));
+    });
+    /* 付いてくるもの */
+    plainLines.push("—");
+    const item=(label,val,note)=>{const r=mk("div","bonus-item");r.append(mk("span",null,label));const s=mk("strong",null,val);if(note)s.append(mk("small",null,note));r.append(s);get.append(r);plainLines.push(label+"　"+val+(note?" "+note:""))};
+    item(t("ライブ本編映像（全27曲）","Live concert (27 songs)"),"× "+n);
+    if(lim){item("40P Photobook","× "+lim);item(t("銀テープレプリカ","Replica silver tape"),"× "+lim)}
+    if(reg){item(t("8Pリーフレット","8-page leaflet"),"× "+reg)}
+    item(t("A5クリアファイル","A5 clear file"),t("最大 "+n+"枚","Up to "+n),t("※対象店舗・在庫状況による","*store/stock dependent"));
   }
   $("share").disabled=$("copy").disabled=!n;
 }
