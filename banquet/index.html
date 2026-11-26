@@ -126,7 +126,7 @@ section.block{padding-top:52px}
 .perk span{color:var(--sub);font-size:.86rem}
 
 /* ---------- 購入予定 ---------- */
-.summary{margin-top:40px;background:var(--navy);color:#fff;padding:40px 0 44px}
+.summary{margin-top:52px;background:var(--navy);color:#fff;padding:40px 0 44px}
 .summary .head{border-color:#fff}
 .summary .head .no{color:#8d98b1}
 .total{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.2)}
@@ -149,8 +149,8 @@ section.block{padding-top:52px}
 .actions button:disabled{opacity:.4;cursor:not-allowed}
 .actions .reset{margin-left:auto}
 
-footer{padding:36px 0 0;color:var(--muted);font-size:.8rem}
-footer a{text-underline-offset:3px}
+.sum-foot{margin-top:34px;padding-top:16px;border-top:1px solid rgba(255,255,255,.15);color:#9faabd;font-size:.78rem}
+.sum-foot a{text-underline-offset:3px}
 
 /* ---------- 下部固定バー ---------- */
 .sticky{position:fixed;z-index:60;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);
@@ -188,7 +188,7 @@ footer a{text-underline-offset:3px}
 </style>
 <script>
 /* キャッシュ対策：最新の version.json と違えば、新しい版を読み込み直す */
-(function(){var BUILD="20261126-1300";
+(function(){var BUILD="20261126-1310";
   fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     if(!j||!j.v||j.v===BUILD)return;
     var key="reloaded-"+j.v;try{if(sessionStorage.getItem(key))return;sessionStorage.setItem(key,"1")}catch(e){}
@@ -220,17 +220,86 @@ footer a{text-underline-offset:3px}
         <div><dt data-ja="収録公演" data-en="RECORDED">収録公演</dt><dd data-ja="2026年6月7日 国立代々木競技場 第一体育館（最終公演）" data-en="June 7, 2026 — Yoyogi National Gymnasium (final show)">2026年6月7日 国立代々木競技場 第一体育館（最終公演）</dd></div>
       </dl>
       <div class="hero-links">
-        <a class="btn btn-white" href="#choose" data-ja="形態を選ぶ ↓" data-en="Choose editions ↓">形態を選ぶ ↓</a>
+        <a class="btn btn-white" href="#choose" data-ja="購入シミュレーターへ ↓" data-en="Go to simulator ↓">購入シミュレーターへ ↓</a>
         <a class="btn btn-ghost" href="https://mazzel.lnk.to/Banquet_Tour" target="_blank" rel="noopener" data-ja="公式予約ページ ↗" data-en="Official preorder ↗">公式予約ページ ↗</a>
       </div>
     </div>
   </div>
 
-  <!-- 01 選ぶ -->
-  <section class="block shell" id="choose">
-    <div class="head"><span class="no">01</span><h2 data-ja="4形態は「仕様 × ディスク」の組み合わせ" data-en="4 editions = version × disc format">4形態は「仕様 × ディスク」の組み合わせ</h2></div>
 
-    <p class="note" data-ja="ライブ本編（全27曲）はどの形態も共通です。欲しいマスの ＋ で枚数を選んでください。" data-en="All editions contain the same 27-song concert. Tap + on the editions you want.">ライブ本編（全27曲）はどの形態も共通です。欲しいマスの ＋ で枚数を選んでください。</p>
+  <!-- 02 初回 vs 通常 -->
+  <section class="block shell" id="edition">
+    <div class="head"><span class="no">01</span><h2 data-ja="初回限定盤と通常盤のちがい" data-en="Limited vs Regular">初回限定盤と通常盤のちがい</h2></div>
+    <table class="compare">
+      <thead><tr><th></th><th><span class="tag lim" data-ja="初回限定盤" data-en="Limited">初回限定盤</span></th><th><span class="tag reg" data-ja="通常盤" data-en="Regular">通常盤</span></th></tr></thead>
+      <tbody>
+        <tr><th data-ja="価格（税込）" data-en="Price">価格（税込）</th><td class="yes">¥10,450</td><td class="yes">¥8,800</td></tr>
+        <tr><th data-ja="パッケージ" data-en="Packaging">パッケージ</th>
+          <td data-ja="三方背トールケース＋トールサイズデジパック" data-en="Slipcase + tall-size digipak">三方背トールケース＋トールサイズデジパック</td>
+          <td data-ja="紙製トールケース" data-en="Paper tall case">紙製トールケース</td></tr>
+        <tr><th data-ja="フォトブック" data-en="Photobook">フォトブック</th><td class="yes" data-ja="40P Photobook" data-en="40-page photobook">40P Photobook</td><td class="no">—</td></tr>
+        <tr><th data-ja="銀テープ" data-en="Silver tape">銀テープ</th><td class="yes" data-ja="銀テープレプリカ" data-en="Replica silver tape">銀テープレプリカ</td><td class="no">—</td></tr>
+        <tr><th data-ja="リーフレット" data-en="Leaflet">リーフレット</th><td class="no">—</td><td class="yes" data-ja="8Pリーフレット" data-en="8-page leaflet">8Pリーフレット</td></tr>
+        <tr><th data-ja="特典映像" data-en="Bonus footage">特典映像</th>
+          <td><ul><li>Behind The Scenes</li><li>MC Digest</li></ul></td>
+          <td><ul><li>Trap — Live Fix Camera</li><li>So Strawberry — Live Fix Camera</li><li>The Voice — Live Fix Camera</li><li>Only You — Solo Chasing Camera</li></ul></td></tr>
+      </tbody>
+    </table>
+    <p class="callout" data-ja-html="<strong>特典映像は重複しません。</strong>メイキングとMC、別アングル映像をすべて見たい場合は、初回限定盤と通常盤の両方が必要です。" data-en-html="<strong>Bonus footage does not overlap.</strong> To get the making-of, MC digest and the alternate-angle clips, you need both a Limited and a Regular edition."><strong>特典映像は重複しません。</strong>メイキングとMC、別アングル映像をすべて見たい場合は、初回限定盤と通常盤の両方が必要です。</p>
+  </section>
+
+  <!-- 03 BD vs DVD -->
+  <section class="block shell" id="media">
+    <div class="head"><span class="no">02</span><h2 data-ja="Blu-ray と DVD のちがい" data-en="Blu-ray vs DVD">Blu-ray と DVD のちがい</h2></div>
+    <table class="compare">
+      <thead><tr><th></th><th>Blu-ray</th><th>DVD</th></tr></thead>
+      <tbody>
+        <tr><th data-ja="価格" data-en="Price">価格</th><td colspan="2" data-ja="同じ（初回 ¥10,450 ／ 通常 ¥8,800）" data-en="Same (Limited ¥10,450 / Regular ¥8,800)">同じ（初回 ¥10,450 ／ 通常 ¥8,800）</td></tr>
+        <tr><th data-ja="収録内容" data-en="Content">収録内容</th><td colspan="2" data-ja="同じ（本編27曲＋各仕様の特典映像）" data-en="Same (27-song concert + that version's bonus footage)">同じ（本編27曲＋各仕様の特典映像）</td></tr>
+        <tr><th data-ja="ディスク枚数" data-en="Discs">ディスク枚数</th><td class="yes" data-ja="2枚" data-en="2">2枚</td><td class="yes" data-ja="3枚" data-en="3">3枚</td></tr>
+        <tr><th data-ja="本編の分け方" data-en="Concert split">本編の分け方</th><td data-ja="DISC 1 に27曲すべて（途中で入れ替えなし）" data-en="All 27 songs on DISC 1 (no disc swap)">DISC 1 に27曲すべて（途中で入れ替えなし）</td><td data-ja="DISC 1（1〜19曲目）と DISC 2（20〜27曲目）に分割" data-en="Split: DISC 1 (songs 1–19), DISC 2 (20–27)">DISC 1（1〜19曲目）と DISC 2（20〜27曲目）に分割</td></tr>
+        <tr><th data-ja="特典映像" data-en="Bonus">特典映像</th><td>DISC 2</td><td>DISC 3</td></tr>
+        <tr><th data-ja="再生機器" data-en="Players">再生機器</th><td data-ja="Blu-rayプレーヤー・レコーダーなどが必要" data-en="Needs a Blu-ray player/recorder">Blu-rayプレーヤー・レコーダーなどが必要</td><td data-ja="DVDプレーヤーでも、Blu-ray機器でも再生可" data-en="Plays on DVD or Blu-ray players">DVDプレーヤーでも、Blu-ray機器でも再生可</td></tr>
+        <tr><th data-ja="画質" data-en="Quality">画質</th><td data-ja="ハイビジョン（高精細）" data-en="High definition">ハイビジョン（高精細）</td><td data-ja="標準画質" data-en="Standard definition">標準画質</td></tr>
+      </tbody>
+    </table>
+    <p class="callout" data-ja-html="<strong>迷ったら：</strong>家にBlu-ray再生できる機器があれば Blu-ray（高画質・入れ替えなし）。DVDプレーヤーしかない場合は DVD を。" data-en-html="<strong>Not sure?</strong> If you can play Blu-ray, pick Blu-ray (sharper, no disc swap). If you only have a DVD player, pick DVD."><strong>迷ったら：</strong>家にBlu-ray再生できる機器があれば Blu-ray（高画質・入れ替えなし）。DVDプレーヤーしかない場合は DVD を。</p>
+  </section>
+
+  <!-- 04 収録内容 -->
+  <section class="block shell" id="setlist">
+    <div class="head"><span class="no">03</span><h2 data-ja="収録内容（全形態共通）" data-en="Setlist (all editions)">収録内容（全形態共通）</h2></div>
+    <div class="setlist-wrap">
+      <ol class="setlist" id="setlist-ol"></ol>
+      <aside class="discmap">
+        <h3 data-ja="ディスク構成" data-en="Disc layout">ディスク構成</h3>
+        <ol>
+          <li><span>Blu-ray DISC 1</span><span data-ja="1〜27曲目" data-en="Songs 1–27">1〜27曲目</span></li>
+          <li><span>Blu-ray DISC 2</span><span data-ja="特典映像" data-en="Bonus">特典映像</span></li>
+        </ol>
+        <ol style="margin-top:12px">
+          <li><span>DVD DISC 1</span><span data-ja="1〜19曲目" data-en="Songs 1–19">1〜19曲目</span></li>
+          <li><span>DVD DISC 2</span><span data-ja="20〜27曲目" data-en="Songs 20–27">20〜27曲目</span></li>
+          <li><span>DVD DISC 3</span><span data-ja="特典映像" data-en="Bonus">特典映像</span></li>
+        </ol>
+      </aside>
+    </div>
+  </section>
+
+  <!-- 05 購入特典 -->
+  <section class="block shell" id="perk">
+    <div class="head"><span class="no">04</span><h2 data-ja="共通購入特典" data-en="Store bonus">共通購入特典</h2></div>
+    <div class="perk">
+      <strong data-ja="A5クリアファイル" data-en="A5 clear file">A5クリアファイル</strong>
+      <span data-ja="全店舗・ECサイト共通／数量限定・一部対象外店舗あり／絵柄は後日発表" data-en="Same at all stores & online / limited stock, some stores excluded / design TBA">全店舗・ECサイト共通／数量限定・一部対象外店舗あり／絵柄は後日発表</span>
+    </div>
+  </section>
+
+
+  <!-- 05 購入シミュレーター -->
+  <section class="block shell" id="choose">
+    <div class="head"><span class="no">05</span><h2 data-ja="購入シミュレーター" data-en="Purchase simulator">購入シミュレーター</h2></div>
+    <p class="note" data-ja="ライブ本編（全27曲）はどの形態も共通です。欲しい形態の ＋ で枚数を選ぶと、下に合計と付いてくるものが出ます。" data-en="All editions contain the same 27-song concert. Tap + to choose quantities; your total appears below.">ライブ本編（全27曲）はどの形態も共通です。欲しい形態の ＋ で枚数を選ぶと、下に合計と付いてくるものが出ます。</p>
 
     <table class="matrix" aria-label="形態の選択">
       <thead>
@@ -255,79 +324,6 @@ footer a{text-underline-offset:3px}
     </table>
   </section>
 
-  <!-- 02 初回 vs 通常 -->
-  <section class="block shell" id="edition">
-    <div class="head"><span class="no">02</span><h2 data-ja="初回限定盤と通常盤のちがい" data-en="Limited vs Regular">初回限定盤と通常盤のちがい</h2></div>
-    <table class="compare">
-      <thead><tr><th></th><th><span class="tag lim" data-ja="初回限定盤" data-en="Limited">初回限定盤</span></th><th><span class="tag reg" data-ja="通常盤" data-en="Regular">通常盤</span></th></tr></thead>
-      <tbody>
-        <tr><th data-ja="価格（税込）" data-en="Price">価格（税込）</th><td class="yes">¥10,450</td><td class="yes">¥8,800</td></tr>
-        <tr><th data-ja="パッケージ" data-en="Packaging">パッケージ</th>
-          <td data-ja="三方背トールケース＋トールサイズデジパック" data-en="Slipcase + tall-size digipak">三方背トールケース＋トールサイズデジパック</td>
-          <td data-ja="紙製トールケース" data-en="Paper tall case">紙製トールケース</td></tr>
-        <tr><th data-ja="フォトブック" data-en="Photobook">フォトブック</th><td class="yes" data-ja="40P Photobook" data-en="40-page photobook">40P Photobook</td><td class="no">—</td></tr>
-        <tr><th data-ja="銀テープ" data-en="Silver tape">銀テープ</th><td class="yes" data-ja="銀テープレプリカ" data-en="Replica silver tape">銀テープレプリカ</td><td class="no">—</td></tr>
-        <tr><th data-ja="リーフレット" data-en="Leaflet">リーフレット</th><td class="no">—</td><td class="yes" data-ja="8Pリーフレット" data-en="8-page leaflet">8Pリーフレット</td></tr>
-        <tr><th data-ja="特典映像" data-en="Bonus footage">特典映像</th>
-          <td><ul><li>Behind The Scenes</li><li>MC Digest</li></ul></td>
-          <td><ul><li>Trap — Live Fix Camera</li><li>So Strawberry — Live Fix Camera</li><li>The Voice — Live Fix Camera</li><li>Only You — Solo Chasing Camera</li></ul></td></tr>
-      </tbody>
-    </table>
-    <p class="callout" data-ja-html="<strong>特典映像は重複しません。</strong>メイキングとMC、別アングル映像をすべて見たい場合は、初回限定盤と通常盤の両方が必要です。" data-en-html="<strong>Bonus footage does not overlap.</strong> To get the making-of, MC digest and the alternate-angle clips, you need both a Limited and a Regular edition."><strong>特典映像は重複しません。</strong>メイキングとMC、別アングル映像をすべて見たい場合は、初回限定盤と通常盤の両方が必要です。</p>
-  </section>
-
-  <!-- 03 BD vs DVD -->
-  <section class="block shell" id="media">
-    <div class="head"><span class="no">03</span><h2 data-ja="Blu-ray と DVD のちがい" data-en="Blu-ray vs DVD">Blu-ray と DVD のちがい</h2></div>
-    <table class="compare">
-      <thead><tr><th></th><th>Blu-ray</th><th>DVD</th></tr></thead>
-      <tbody>
-        <tr><th data-ja="価格" data-en="Price">価格</th><td colspan="2" data-ja="同じ（初回 ¥10,450 ／ 通常 ¥8,800）" data-en="Same (Limited ¥10,450 / Regular ¥8,800)">同じ（初回 ¥10,450 ／ 通常 ¥8,800）</td></tr>
-        <tr><th data-ja="収録内容" data-en="Content">収録内容</th><td colspan="2" data-ja="同じ（本編27曲＋各仕様の特典映像）" data-en="Same (27-song concert + that version's bonus footage)">同じ（本編27曲＋各仕様の特典映像）</td></tr>
-        <tr><th data-ja="ディスク枚数" data-en="Discs">ディスク枚数</th><td class="yes" data-ja="2枚" data-en="2">2枚</td><td class="yes" data-ja="3枚" data-en="3">3枚</td></tr>
-        <tr><th data-ja="本編の分け方" data-en="Concert split">本編の分け方</th><td data-ja="DISC 1 に27曲すべて（途中で入れ替えなし）" data-en="All 27 songs on DISC 1 (no disc swap)">DISC 1 に27曲すべて（途中で入れ替えなし）</td><td data-ja="DISC 1（1〜19曲目）と DISC 2（20〜27曲目）に分割" data-en="Split: DISC 1 (songs 1–19), DISC 2 (20–27)">DISC 1（1〜19曲目）と DISC 2（20〜27曲目）に分割</td></tr>
-        <tr><th data-ja="特典映像" data-en="Bonus">特典映像</th><td>DISC 2</td><td>DISC 3</td></tr>
-        <tr><th data-ja="再生機器" data-en="Players">再生機器</th><td data-ja="Blu-rayプレーヤー・レコーダーなどが必要" data-en="Needs a Blu-ray player/recorder">Blu-rayプレーヤー・レコーダーなどが必要</td><td data-ja="DVDプレーヤーでも、Blu-ray機器でも再生可" data-en="Plays on DVD or Blu-ray players">DVDプレーヤーでも、Blu-ray機器でも再生可</td></tr>
-        <tr><th data-ja="画質" data-en="Quality">画質</th><td data-ja="ハイビジョン（高精細）" data-en="High definition">ハイビジョン（高精細）</td><td data-ja="標準画質" data-en="Standard definition">標準画質</td></tr>
-      </tbody>
-    </table>
-    <p class="callout" data-ja-html="<strong>迷ったら：</strong>家にBlu-ray再生できる機器があれば Blu-ray（高画質・入れ替えなし）。DVDプレーヤーしかない場合は DVD を。" data-en-html="<strong>Not sure?</strong> If you can play Blu-ray, pick Blu-ray (sharper, no disc swap). If you only have a DVD player, pick DVD."><strong>迷ったら：</strong>家にBlu-ray再生できる機器があれば Blu-ray（高画質・入れ替えなし）。DVDプレーヤーしかない場合は DVD を。</p>
-  </section>
-
-  <!-- 04 収録内容 -->
-  <section class="block shell" id="setlist">
-    <div class="head"><span class="no">04</span><h2 data-ja="収録内容（全形態共通）" data-en="Setlist (all editions)">収録内容（全形態共通）</h2></div>
-    <div class="setlist-wrap">
-      <ol class="setlist" id="setlist-ol"></ol>
-      <aside class="discmap">
-        <h3 data-ja="ディスク構成" data-en="Disc layout">ディスク構成</h3>
-        <ol>
-          <li><span>Blu-ray DISC 1</span><span data-ja="1〜27曲目" data-en="Songs 1–27">1〜27曲目</span></li>
-          <li><span>Blu-ray DISC 2</span><span data-ja="特典映像" data-en="Bonus">特典映像</span></li>
-        </ol>
-        <ol style="margin-top:12px">
-          <li><span>DVD DISC 1</span><span data-ja="1〜19曲目" data-en="Songs 1–19">1〜19曲目</span></li>
-          <li><span>DVD DISC 2</span><span data-ja="20〜27曲目" data-en="Songs 20–27">20〜27曲目</span></li>
-          <li><span>DVD DISC 3</span><span data-ja="特典映像" data-en="Bonus">特典映像</span></li>
-        </ol>
-      </aside>
-    </div>
-  </section>
-
-  <!-- 05 購入特典 -->
-  <section class="block shell" id="perk">
-    <div class="head"><span class="no">05</span><h2 data-ja="共通購入特典" data-en="Store bonus">共通購入特典</h2></div>
-    <div class="perk">
-      <strong data-ja="A5クリアファイル" data-en="A5 clear file">A5クリアファイル</strong>
-      <span data-ja="全店舗・ECサイト共通／数量限定・一部対象外店舗あり／絵柄は後日発表" data-en="Same at all stores & online / limited stock, some stores excluded / design TBA">全店舗・ECサイト共通／数量限定・一部対象外店舗あり／絵柄は後日発表</span>
-    </div>
-  </section>
-
-  <footer class="shell">
-    <p data-ja="※非公式ファンツールです。送料・割引は含みません。購入特典は対象店舗・在庫により付かない場合があります。収録内容・仕様は変更になる場合があるため、購入前に公式情報をご確認ください。" data-en="Unofficial fan tool. Shipping and discounts are not included. Store bonuses depend on store and stock. Contents may change — check official info before buying.">※非公式ファンツールです。送料・割引は含みません。購入特典は対象店舗・在庫により付かない場合があります。収録内容・仕様は変更になる場合があるため、購入前に公式情報をご確認ください。</p>
-    <p><a href="https://mazzel.lnk.to/Banquet_Tour" target="_blank" rel="noopener" data-ja="公式予約ページ" data-en="Official preorder page">公式予約ページ</a>　·　<a href="../" data-ja="“Touch” 4形態ガイド" data-en="“Touch” edition guide">“Touch” 4形態ガイド</a></p>
-  </footer>
-
   <!-- 06 購入予定 -->
   <section class="summary" id="summary">
     <div class="shell">
@@ -350,6 +346,10 @@ footer a{text-underline-offset:3px}
         <button type="button" class="main" id="share" disabled data-ja="画像で共有・保存" data-en="Share / save image">画像で共有・保存</button>
         <button type="button" id="copy" disabled data-ja="文字をコピー" data-en="Copy text">文字をコピー</button>
         <button type="button" class="reset" id="reset" data-ja="リセット" data-en="Reset">リセット</button>
+      </div>
+      <div class="sum-foot">
+    <p data-ja="※非公式ファンツールです。送料・割引は含みません。購入特典は対象店舗・在庫により付かない場合があります。収録内容・仕様は変更になる場合があるため、購入前に公式情報をご確認ください。" data-en="Unofficial fan tool. Shipping and discounts are not included. Store bonuses depend on store and stock. Contents may change — check official info before buying.">※非公式ファンツールです。送料・割引は含みません。購入特典は対象店舗・在庫により付かない場合があります。収録内容・仕様は変更になる場合があるため、購入前に公式情報をご確認ください。</p>
+    <p><a href="https://mazzel.lnk.to/Banquet_Tour" target="_blank" rel="noopener" data-ja="公式予約ページ" data-en="Official preorder page">公式予約ページ</a>　·　<a href="../" data-ja="“Touch” 4形態ガイド" data-en="“Touch” edition guide">“Touch” 4形態ガイド</a></p>
       </div>
     </div>
   </section>
