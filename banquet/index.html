@@ -105,6 +105,18 @@ section.block{padding-top:52px}
 .callout{margin:16px 0 0;padding:12px 0 0 14px;border-left:3px solid var(--navy);font-size:.88rem;color:var(--sub)}
 .callout strong{color:var(--ink)}
 
+/* 折りたたみ（収録内容） */
+.fold>summary{list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary h2{flex:1}
+.fold-btn{flex:0 0 auto;align-self:center;display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:800;border:1px solid #cfd1d6;background:#fff;border-radius:999px;padding:6px 12px 6px 14px;min-height:36px}
+.fold-btn::after{content:"＋";font-weight:900}
+.fold[open] .fold-btn::after{content:"−"}
+.fold .when-open{display:none}
+.fold[open] .when-open{display:inline}
+.fold[open] .when-closed{display:none}
+.fold>summary:focus-visible{outline:2px solid var(--navy);outline-offset:4px}
+
 /* ---------- 収録内容 ---------- */
 .setlist-wrap{display:grid;grid-template-columns:1fr 220px;gap:28px;align-items:start}
 .setlist{list-style:none;margin:0;padding:0;columns:2;column-gap:28px;font-size:.9rem}
@@ -204,7 +216,7 @@ section.block{padding-top:52px}
 </style>
 <script>
 /* キャッシュ対策：最新の version.json と違えば、新しい版を読み込み直す */
-(function(){var BUILD="20261126-1320";
+(function(){var BUILD="20261126-1330";
   fetch("version.json?t="+Date.now(),{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){
     if(!j||!j.v||j.v===BUILD)return;
     var key="reloaded-"+j.v;try{if(sessionStorage.getItem(key))return;sessionStorage.setItem(key,"1")}catch(e){}
@@ -284,7 +296,8 @@ section.block{padding-top:52px}
 
   <!-- 04 収録内容 -->
   <section class="block shell" id="setlist">
-    <div class="head"><span class="no">03</span><h2 data-ja="収録内容（全形態共通）" data-en="Setlist (all editions)">収録内容（全形態共通）</h2></div>
+    <details class="fold">
+    <summary class="head"><span class="no">03</span><h2 data-ja="収録内容（全形態共通）" data-en="Setlist (all editions)">収録内容（全形態共通）</h2><span class="fold-btn"><span class="when-closed" data-ja="開く" data-en="Open">開く</span><span class="when-open" data-ja="閉じる" data-en="Close">閉じる</span></span></summary>
     <div class="setlist-wrap">
       <ol class="setlist" id="setlist-ol"></ol>
       <aside class="discmap">
@@ -300,6 +313,7 @@ section.block{padding-top:52px}
         </ol>
       </aside>
     </div>
+    </details>
   </section>
 
   <!-- 05 購入特典 -->
